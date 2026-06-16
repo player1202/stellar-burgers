@@ -1,6 +1,7 @@
 import { createSlice, createAsyncThunk } from '@reduxjs/toolkit';
 import { getOrdersApi, orderBurgerApi, getOrderByNumberApi } from '@api';
 import { TOrder } from '@utils-types';
+import { clearConstructor } from './constructorReducer';
 
 export interface OrdersState {
   orders: TOrder[];
@@ -23,10 +24,10 @@ export const fetchOrders = createAsyncThunk('orders/fetchOrders', async () => {
 
 export const createOrder = createAsyncThunk(
   'orders/createOrder',
-  async (ingredients: string[]) => {
+  async (ingredients: string[], { dispatch }) => {
     const response = await orderBurgerApi(ingredients);
-    // Создаем объект в соответствии с типом TOrder (без поля price)
-    const order: TOrder = {
+    dispatch(clearConstructor());
+    return {
       _id: response.order._id,
       status: response.order.status,
       name: response.order.name,
@@ -34,8 +35,7 @@ export const createOrder = createAsyncThunk(
       updatedAt: response.order.updatedAt,
       number: response.order.number,
       ingredients: ingredients
-    };
-    return order;
+    } as TOrder;
   }
 );
 
@@ -72,6 +72,7 @@ export const ordersSlice = createSlice({
       .addCase(createOrder.pending, (state) => {
         state.isLoading = true;
         state.error = null;
+        state.currentOrder = null;
       })
       .addCase(createOrder.fulfilled, (state, action) => {
         state.isLoading = false;
@@ -97,3 +98,4 @@ export const ordersSlice = createSlice({
 });
 
 export const { clearCurrentOrder } = ordersSlice.actions;
+export default ordersSlice.reducer;

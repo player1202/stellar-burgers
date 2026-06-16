@@ -67,7 +67,11 @@ export const logoutUser = createAsyncThunk('user/logout', async () => {
 export const userSlice = createSlice({
   name: 'user',
   initialState,
-  reducers: {},
+  reducers: {
+    setAuthChecked: (state) => {
+      state.isAuthChecked = true;
+    }
+  },
   extraReducers: (builder) => {
     builder
       // Login
@@ -142,3 +146,6 @@ export const userSlice = createSlice({
       });
   }
 });
+
+export const { setAuthChecked } = userSlice.actions;
+export default userSlice.reducer;

@@ -3,26 +3,31 @@ import {
   ConstructorPage,
   Feed,
   ForgotPassword,
+  IngredientPage,
   Login,
   NotFound404,
   Profile,
   ProfileOrders,
   Register,
-  ResetPassword
+  ResetPassword,
+  OrderPage
 } from '@pages';
 import { Routes, Route, useLocation, useNavigate } from 'react-router-dom';
 import '../../index.css';
 import styles from './app.module.css';
-import { IngredientPage } from '@pages';
+
 import { AppHeader } from '@components';
 import { Modal, IngredientDetails, OrderInfo } from '@components';
 import { ProtectedRoute } from '../protected-route/protected-route';
 import { useAppDispatch, useAppSelector } from '../../services/store';
 import { fetchIngredients } from '../../services/slices/ingredients-slice';
+import { getUser, setAuthChecked } from '../../services/slices/user-slice';
 import {
   selectIsLoading,
   selectError
 } from '../../services/selectors/ingredients-selectors';
+import { selectIsAuthChecked } from '../../services/selectors/user-selectors';
+import { getCookie } from '../../utils/cookie';
 import { Preloader } from '@ui';
 
 const App = () => {
@@ -33,14 +38,31 @@ const App = () => {
 
   const isLoading = useAppSelector(selectIsLoading);
   const error = useAppSelector(selectError);
-
-  useEffect(() => {
-    dispatch(fetchIngredients());
-  }, [dispatch]);
+  const isAuthChecked = useAppSelector(selectIsAuthChecked);
 
   const handleClose = () => {
     navigate(-1);
   };
+
+  useEffect(() => {
+    dispatch(fetchIngredients());
+
+    const accessToken = getCookie('accessToken');
+    if (accessToken && !isAuthChecked) {
+      dispatch(getUser());
+    } else if (!accessToken && !isAuthChecked) {
+      dispatch(setAuthChecked());
+    }
+  }, [dispatch, isAuthChecked]);
+
+  if (!isAuthChecked) {
+    return (
+      <div className={styles.app}>
+        <AppHeader />
+        <Preloader />
+      </div>
+    );
+  }
 
   if (isLoading) {
     return (
@@ -69,6 +91,7 @@ const App = () => {
       <Routes location={background || location}>
         <Route path='/' element={<ConstructorPage />} />
         <Route path='/feed' element={<Feed />} />
+        <Route path='/feed/:number' element={<OrderPage />} />
         <Route path='/ingredients/:id' element={<IngredientPage />} />
 
         <Route
@@ -116,6 +139,14 @@ const App = () => {
           element={
             <ProtectedRoute>
               <ProfileOrders />
+            </ProtectedRoute>
+          }
+        />
+        <Route
+          path='/profile/orders/:number'
+          element={
+            <ProtectedRoute>
+              <OrderPage />
             </ProtectedRoute>
           }
         />

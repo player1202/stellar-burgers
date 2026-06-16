@@ -74,7 +74,7 @@ export const Profile: FC = () => {
 
   const handleLogout = () => {
     dispatch(logoutUser());
-    navigate('/');
+    navigate('/login');
   };
 
   if (isLoading && !user) {

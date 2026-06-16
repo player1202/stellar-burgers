@@ -3,6 +3,7 @@ export * from './feed';
 export * from './forgot-password';
 export * from './ingredient-page';
 export * from './login';
+export * from './order-page';
 export * from './profile';
 export * from './profile-orders';
 export * from './register';

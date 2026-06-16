@@ -1,7 +1,6 @@
 import { FC, useMemo } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { useAppSelector, useAppDispatch } from '../../services/store';
-import { clearConstructor } from '../../services/slices/constructorReducer';
+import { useAppDispatch, useAppSelector } from '../../services/store';
 import { createOrder } from '../../services/slices/orders-slice';
 import { selectUser } from '../../services/selectors/user-selectors';
 import { TConstructorIngredient } from '@utils-types';
@@ -43,9 +42,7 @@ export const BurgerConstructor: FC = () => {
     dispatch(createOrder(ingredientsIds));
   };
 
-  const closeOrderModal = () => {
-    dispatch(clearConstructor());
-  };
+  const closeOrderModal = () => {};
 
   const price = useMemo(() => {
     const bunPrice = constructorItems.bun ? constructorItems.bun.price * 2 : 0;

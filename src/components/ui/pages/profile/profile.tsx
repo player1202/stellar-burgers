@@ -15,8 +15,7 @@ export const ProfileUI: FC<ProfileUIProps> = ({
 }) => (
   <main className={`${commonStyles.container}`}>
     <div className={`mt-30 mr-15 ${styles.menu}`}>
-      <ProfileMenu />{' '}
-      {/* ← убираем onLogout, так как ProfileMenu сам обрабатывает выход */}
+      <ProfileMenu />
     </div>
     <form
       className={`mt-30 ${styles.form} ${commonStyles.form}`}
