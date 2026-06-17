@@ -44,7 +44,6 @@ export const AppHeaderUI: FC<TAppHeaderUIProps> = ({ userName }) => (
           className={({ isActive }) =>
             `${styles.link} ${isActive ? styles.active : ''}`
           }
-          end
         >
           <ProfileIcon type='primary' />
           <p className='text text_type_main-default ml-2'>
