@@ -5,8 +5,7 @@ import { ordersSlice } from './slices/orders-slice';
 import { feedSlice } from './slices/feed-slice';
 import constructorReducer from './slices/constructorReducer';
 
-console.log('constructorReducer type:', typeof constructorReducer);
-console.log('constructorReducer:', constructorReducer);
+console.log('constructorReducer in rootReducer:', constructorReducer);
 
 export const rootReducer = combineReducers({
   ingredients: ingredientsSlice.reducer,

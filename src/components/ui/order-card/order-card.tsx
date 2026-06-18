@@ -9,9 +9,11 @@ import { OrderCardUIProps } from './type';
 
 export const OrderCardUI: FC<OrderCardUIProps> = ({
   orderInfo,
-  locationState
+  locationState,
+  pathname
 }) => {
-  const { number, name, status, date, total, ingredientsInfo } = orderInfo;
+  const { number, name, status, date, total, ingredientsToShow, remains } =
+    orderInfo;
 
   const statusText =
     {
@@ -30,7 +32,7 @@ export const OrderCardUI: FC<OrderCardUIProps> = ({
     }[status] || '';
 
   return (
-    <Link to={`/feed/${number}`} state={locationState} className={styles.link}>
+    <Link to={pathname} state={locationState} className={styles.link}>
       <div className={styles.card}>
         <div className={styles.header}>
           <span className={styles.number}>#{number}</span>
@@ -40,22 +42,16 @@ export const OrderCardUI: FC<OrderCardUIProps> = ({
         <p className={`${styles.status} ${statusColor}`}>{statusText}</p>
         <div className={styles.footer}>
           <div className={styles.ingredients}>
-            {Object.values(ingredientsInfo)
-              .slice(0, 6)
-              .map((item, index) => (
-                <div
-                  key={item._id}
-                  className={styles.ingredientIcon}
-                  style={{ zIndex: 6 - index }}
-                >
-                  <img src={item.image} alt={item.name} />
-                  {index === 5 && Object.values(ingredientsInfo).length > 6 && (
-                    <span className={styles.extraCount}>
-                      +{Object.values(ingredientsInfo).length - 6}
-                    </span>
-                  )}
-                </div>
-              ))}
+            {ingredientsToShow.map((item, index) => (
+              <div
+                key={item._id}
+                className={styles.ingredientIcon}
+                style={{ zIndex: 6 - index }}
+              >
+                <img src={item.image} alt={item.name} />
+              </div>
+            ))}
+            {remains > 0 && <div className={styles.extraCount}>+{remains}</div>}
           </div>
           <div className={styles.price}>
             <span>{total}</span>

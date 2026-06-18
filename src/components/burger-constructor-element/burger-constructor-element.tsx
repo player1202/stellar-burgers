@@ -16,10 +16,9 @@ export const BurgerConstructorElement: FC<BurgerConstructorElementProps> = ({
 
   const handleClose = () => dispatch(removeIngredient(ingredient.id));
   const handleMoveUp = () =>
-    index > 0 && dispatch(moveIngredient({ from: index, to: index - 1 }));
+    index > 0 && dispatch(moveIngredient(index, index - 1));
   const handleMoveDown = () =>
-    index < totalItems - 1 &&
-    dispatch(moveIngredient({ from: index, to: index + 1 }));
+    index < totalItems - 1 && dispatch(moveIngredient(index, index + 1));
 
   return (
     <BurgerConstructorElementUI

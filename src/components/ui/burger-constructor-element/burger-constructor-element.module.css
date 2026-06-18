@@ -1,16 +1,52 @@
-.element {
+.container {
   display: flex;
   align-items: center;
-  justify-content: flex-end;
+  gap: 8px;
+  width: 100%;
+  list-style: none;
+  padding: 0 0 0 16px;
+  margin: 0;
+  min-height: 80px;
 }
 
-.element:last-child {
-  margin-bottom: 0;
-}
-
-.element_fullwidth {
+.controls {
   display: flex;
   flex-direction: column;
+  gap: 2px;
+  flex-shrink: 0;
+  width: 24px;
+  height: 48px;
+  justify-content: center;
+}
+
+.controls button {
+  background: none;
+  border: none;
+  color: #8585ad;
+  cursor: pointer;
+  padding: 2px 6px;
+  font-size: 16px;
+  line-height: 1;
+  transition: color 0.2s;
   width: 100%;
-  max-width: 536px;
+  text-align: center;
+  height: 20px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.controls button:hover:not(:disabled) {
+  color: #f2f2f3;
+}
+
+.controls button:disabled {
+  opacity: 0.3;
+  cursor: not-allowed;
+}
+
+.container > div:last-child {
+  flex: 1;
+  min-width: 0;
+  height: 80px;
 }

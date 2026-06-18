@@ -14,5 +14,6 @@ export type OrderCardUIProps = {
     ingredientsToShow: (TIngredient & { count: number })[];
     remains: number;
   };
+  pathname: string;
   locationState?: { background: any };
 };

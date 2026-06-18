@@ -1,4 +1,5 @@
 import { FC, useMemo } from 'react';
+import { useLocation } from 'react-router-dom';
 import { useAppSelector } from '../../services/store';
 import { selectIngredients } from '../../services/selectors/ingredients-selectors';
 import { TOrder, TIngredient } from '@utils-types';
@@ -6,10 +7,10 @@ import { OrderCardUI } from '@ui';
 
 interface OrderCardProps {
   order: TOrder;
-  locationState?: { background: any };
 }
 
-export const OrderCard: FC<OrderCardProps> = ({ order, locationState }) => {
+export const OrderCard: FC<OrderCardProps> = ({ order }) => {
+  const location = useLocation();
   const ingredients = useAppSelector(selectIngredients);
 
   const orderInfo = useMemo(() => {
@@ -62,5 +63,17 @@ export const OrderCard: FC<OrderCardProps> = ({ order, locationState }) => {
     return null;
   }
 
-  return <OrderCardUI orderInfo={orderInfo} locationState={locationState} />;
+  const basePath = location.pathname.includes('/profile')
+    ? '/profile/orders'
+    : '/feed';
+  const pathname = `${basePath}/${order.number}`;
+  const locationState = { background: location };
+
+  return (
+    <OrderCardUI
+      orderInfo={orderInfo}
+      pathname={pathname}
+      locationState={locationState}
+    />
+  );
 };

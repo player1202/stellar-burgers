@@ -14,13 +14,6 @@ export const BurgerConstructorElementUI: FC<
   handleMoveDown
 }) => (
   <div className={styles.container}>
-    <ConstructorElement
-      text={ingredient.name}
-      price={ingredient.price}
-      thumbnail={ingredient.image}
-      handleClose={handleClose}
-      extraClass={index === totalItems - 1 ? styles.last : ''}
-    />
     <div className={styles.controls}>
       <button onClick={handleMoveUp} disabled={index === 0}>
         ↑
@@ -29,5 +22,11 @@ export const BurgerConstructorElementUI: FC<
         ↓
       </button>
     </div>
+    <ConstructorElement
+      text={ingredient.name}
+      price={ingredient.price}
+      thumbnail={ingredient.image}
+      handleClose={handleClose}
+    />
   </div>
 );
