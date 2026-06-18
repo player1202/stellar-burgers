@@ -1,28 +1,45 @@
-import { FC } from 'react';
-
-import { TOrder } from '@utils-types';
-import { FeedInfoUI } from '../ui/feed-info';
-
-const getOrders = (orders: TOrder[], status: string): number[] =>
-  orders
-    .filter((item) => item.status === status)
-    .map((item) => item.number)
-    .slice(0, 20);
+import { FC, useMemo } from 'react';
+import { useSelector } from '../../services/store';
+import {
+  selectFeedOrders,
+  selectFeedTotal,
+  selectFeedTotalToday
+} from '../../services/selectors/feed-selectors';
+import { FeedInfoUI } from '@ui';
 
 export const FeedInfo: FC = () => {
-  /** TODO: взять переменные из стора */
-  const orders: TOrder[] = [];
-  const feed = {};
+  const orders = useSelector(selectFeedOrders);
+  const total = useSelector(selectFeedTotal);
+  const totalToday = useSelector(selectFeedTotalToday);
 
-  const readyOrders = getOrders(orders, 'done');
+  const { readyOrders, pendingOrders } = useMemo(() => {
+    const ready: number[] = [];
+    const pending: number[] = [];
 
-  const pendingOrders = getOrders(orders, 'pending');
+    orders.forEach((order) => {
+      if (order.status === 'done') {
+        ready.push(order.number);
+      } else if (order.status === 'pending' || order.status === 'created') {
+        pending.push(order.number);
+      }
+    });
+
+    return {
+      readyOrders: ready.slice(0, 10),
+      pendingOrders: pending.slice(0, 10)
+    };
+  }, [orders]);
+
+  const feed = {
+    total,
+    totalToday
+  };
 
   return (
     <FeedInfoUI
+      feed={feed}
       readyOrders={readyOrders}
       pendingOrders={pendingOrders}
-      feed={feed}
     />
   );
 };

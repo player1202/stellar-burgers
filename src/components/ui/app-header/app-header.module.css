@@ -1,6 +1,7 @@
 .header {
   background-color: var(--background);
 }
+
 .menu {
   display: flex;
   align-items: center;
@@ -12,15 +13,31 @@
 .menu_part_left {
   display: flex;
   flex-basis: 35%;
+  gap: 8px;
 }
 
 .link {
   display: flex;
+  align-items: center;
   text-decoration: none;
   color: var(--text-inactive-color);
+  gap: 8px;
+  transition: color 0.2s;
 }
 
-.link_active {
+.link:hover {
+  color: var(--text-primary-color);
+}
+
+.active {
+  color: var(--text-primary-color);
+}
+
+.active svg {
+  fill: var(--text-primary-color);
+}
+
+.active p {
   color: var(--text-primary-color);
 }
 

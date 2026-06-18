@@ -1,52 +1,41 @@
-import React, { FC, memo } from 'react';
-
+import { FC } from 'react';
+import { FeedInfoUIProps, HalfColumnProps } from './type';
 import styles from './feed-info.module.css';
 
-import { FeedInfoUIProps, HalfColumnProps, TColumnProps } from './type';
-
-export const FeedInfoUI: FC<FeedInfoUIProps> = memo(
-  ({ feed, readyOrders, pendingOrders }) => {
-    const { total, totalToday } = feed;
-
-    return (
-      <section>
-        <div className={styles.columns}>
-          <HalfColumn
-            orders={readyOrders}
-            title={'Готовы'}
-            textColor={'blue'}
-          />
-          <HalfColumn orders={pendingOrders} title={'В работе'} />
-        </div>
-        <Column title={'Выполнено за все время'} content={total} />
-        <Column title={'Выполнено за сегодня'} content={totalToday} />
-      </section>
-    );
-  }
+export const FeedInfoUI: FC<FeedInfoUIProps> = ({
+  feed,
+  readyOrders,
+  pendingOrders
+}) => (
+  <div className={styles.container}>
+    <div className={styles.columns}>
+      <HalfColumn orders={readyOrders} title='Готовы:' textColor='#00CCCC' />
+      <HalfColumn orders={pendingOrders} title='В работе:' />
+    </div>
+    <div className={styles.total}>
+      <p className='text text_type_main-medium'>Выполнено за все время:</p>
+      <p className='text text_type_digits-large'>{feed.total}</p>
+    </div>
+    <div className={styles.totalToday}>
+      <p className='text text_type_main-medium'>Выполнено за сегодня:</p>
+      <p className='text text_type_digits-large'>{feed.totalToday}</p>
+    </div>
+  </div>
 );
 
 const HalfColumn: FC<HalfColumnProps> = ({ orders, title, textColor }) => (
-  <div className={`pr-6 ${styles.column}`}>
-    <h3 className={`text text_type_main-medium ${styles.title}`}>{title}:</h3>
-    <ul className={`pt-6  ${styles.list}`}>
-      {orders.map((item, index) => (
+  <div className={styles.halfColumn}>
+    <p className='text text_type_main-medium'>{title}</p>
+    <ul className={styles.orderNumbers}>
+      {orders.map((number) => (
         <li
-          className={`text text_type_digits-default ${styles.list_item}`}
-          style={{ color: textColor === 'blue' ? '#00cccc' : '#F2F2F3' }}
-          key={index}
+          key={number}
+          className={`text text_type_digits-default`}
+          style={{ color: textColor }}
         >
-          {item}
+          {number}
         </li>
       ))}
     </ul>
   </div>
-);
-
-const Column: FC<TColumnProps> = ({ title, content }) => (
-  <>
-    <h3 className={`pt-15 text text_type_main-medium ${styles.title}`}>
-      {title}:
-    </h3>
-    <p className={`text text_type_digits-large ${styles.content}`}>{content}</p>
-  </>
 );

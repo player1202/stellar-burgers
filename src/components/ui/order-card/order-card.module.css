@@ -1,66 +1,117 @@
+.link {
+  text-decoration: none;
+  color: inherit;
+}
+
+.card {
+  background: #1c1c21;
+  border-radius: 12px;
+  padding: 20px 24px;
+  margin-bottom: 16px;
+  transition: all 0.2s;
+}
+
+.card:hover {
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.5);
+}
+
+.header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 12px;
+}
+
+.number {
+  font-size: 20px;
+  font-weight: 700;
+}
+
+.date {
+  color: #8585ad;
+}
+
+.name {
+  font-size: 18px;
+  font-weight: 700;
+  margin: 0 0 8px 0;
+}
+
+.status {
+  font-size: 14px;
+  margin: 0 0 16px 0;
+}
+
+.done {
+  color: #00cccc;
+}
+
+.pending {
+  color: #f2f2f3;
+}
+
+.created {
+  color: #f2f2f3;
+}
+
+.cancelled {
+  color: #e52b1a;
+}
+
+.footer {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
 .ingredients {
   display: flex;
-  padding: 0;
-  margin: 0;
-}
-
-.order {
-  display: block;
-  text-decoration: none;
-  color: unset;
-  background-color: #1c1c21;
-  border-radius: 40px;
-  min-width: 576px;
-  box-sizing: border-box;
-}
-
-.order_info {
-  display: flex;
-  justify-content: space-between;
+  flex-direction: row-reverse;
   align-items: center;
 }
 
-.order_name {
-  text-align: left;
-}
-
-.order_content {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-}
-
-.order_total {
-  vertical-align: top;
-}
-
-.img_wrap {
-  width: 62px;
-  height: 62px;
+.ingredientIcon {
+  width: 48px;
+  height: 48px;
   border-radius: 50%;
-  border: #801ab3 solid 2px;
-  background-color: #1c1c21;
-  position: relative;
-  list-style: none;
-  margin: 0;
-  padding: 0;
+  border: 2px solid #2f2f37;
+  background: #1c1c21;
+  overflow: hidden;
+  margin-left: -12px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
 }
 
-.img_wrap:nth-child(n + 2) {
-  position: relative;
-  right: 25px;
+.ingredientIcon:first-child {
+  margin-left: 0;
 }
 
-.img {
-  position: relative;
-  right: 25px;
-  width: 112px;
-  height: 56px;
+.ingredientIcon img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
 }
 
-.remains {
-  position: absolute;
-  left: 50%;
-  top: 50%;
-  transform: translate(-50%, -50%);
+.extraCount {
+  width: 48px;
+  height: 48px;
+  border-radius: 50%;
+  border: 2px solid #2f2f37;
+  background: #1c1c21;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 14px;
+  font-weight: 700;
+  color: #f2f2f3;
+  margin-left: -12px;
+}
+
+.price {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 20px;
+  font-weight: 700;
 }
