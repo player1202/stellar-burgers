@@ -48,10 +48,7 @@ export const BurgerConstructorUI: FC<BurgerConstructorUIProps> = ({
             )
           )
         ) : (
-          <div
-            className={styles.noBuns}
-            data-testid='constructor-ingredient-empty'
-          >
+          <div className={styles.noBuns} data-testid='constructor-ingredient'>
             Выберите начинку
           </div>
         )}

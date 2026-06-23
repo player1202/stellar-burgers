@@ -13,7 +13,7 @@ export const BurgerConstructorElementUI: FC<
   handleMoveUp,
   handleMoveDown
 }) => (
-  <div className={styles.container}>
+  <div className={styles.container} data-testid='constructor-ingredient'>
     <div className={styles.controls}>
       <button onClick={handleMoveUp} disabled={index === 0}>
         ↑
