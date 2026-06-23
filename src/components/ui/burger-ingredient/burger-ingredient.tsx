@@ -1,5 +1,5 @@
 import React, { FC, memo } from 'react';
-import { Link, useLocation } from 'react-router-dom'; // ← добавьте useLocation
+import { Link } from 'react-router-dom';
 import styles from './burger-ingredient.module.css';
 import {
   Counter,
@@ -9,18 +9,20 @@ import {
 import { TBurgerIngredientUIProps } from './type';
 
 export const BurgerIngredientUI: FC<TBurgerIngredientUIProps> = memo(
-  ({ ingredient, count, handleAdd }) => {
+  ({ ingredient, count, handleAdd, locationState }) => {
     const { image, price, name, _id } = ingredient;
-    const location = useLocation();
 
     return (
-      <li className={styles.container}>
+      <li className={styles.container} data-testid='ingredient-card'>
+        <span data-testid={ingredient.type === 'bun' ? 'bun' : 'main'}>
+          {ingredient.type === 'bun' ? 'bun' : 'main'}
+        </span>
         <Link
           className={styles.article}
           to={`/ingredients/${_id}`}
-          state={{ background: location }}
+          state={locationState}
         >
-          {count !== undefined && count > 0 && <Counter count={count} />}
+          {count && count > 0 && <Counter count={count} />}
           <img className={styles.img} src={image} alt='картинка ингредиента.' />
           <div className={`${styles.cost} mt-2 mb-2`}>
             <p className='text text_type_digits-default mr-2'>{price}</p>

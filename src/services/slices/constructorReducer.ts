@@ -1,6 +1,7 @@
 import { TConstructorIngredient, TIngredient } from '@utils-types';
+import { nanoid } from 'nanoid';
 
-interface ConstructorState {
+export interface ConstructorState {
   bun: TConstructorIngredient | null;
   ingredients: TConstructorIngredient[];
 }
@@ -38,16 +39,10 @@ const constructorReducer = (
   state = initialState,
   action: any
 ): ConstructorState => {
-  console.log('constructorReducer called with state:', state);
-  console.log('constructorReducer called with action:', action.type);
-
-  // Если state - это функция или не объект, возвращаем initialState
   if (!state || typeof state !== 'object' || state === null) {
-    console.warn('State is invalid, using initialState');
     return initialState;
   }
 
-  // Гарантируем, что ingredients - это массив
   const currentState = {
     ...state,
     ingredients: Array.isArray(state.ingredients) ? state.ingredients : []
@@ -57,7 +52,7 @@ const constructorReducer = (
     case ADD_INGREDIENT: {
       const ingredient: TConstructorIngredient = {
         ...action.payload,
-        id: crypto.randomUUID()
+        id: nanoid()
       };
       if (ingredient.type === 'bun') {
         return { ...currentState, bun: ingredient };

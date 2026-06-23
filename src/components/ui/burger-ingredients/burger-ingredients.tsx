@@ -19,53 +19,50 @@ export const BurgerIngredientsUI: FC<BurgerIngredientsUIProps> = memo(
     onTabClick,
     onAddIngredient
   }) => (
-    <>
-      <section className={styles.burger_ingredients}>
-        <nav>
-          <ul className={styles.menu}>
-            <Tab value='bun' active={currentTab === 'bun'} onClick={onTabClick}>
-              Булки
-            </Tab>
-            <Tab
-              value='main'
-              active={currentTab === 'main'}
-              onClick={onTabClick}
-            >
-              Начинки
-            </Tab>
-            <Tab
-              value='sauce'
-              active={currentTab === 'sauce'}
-              onClick={onTabClick}
-            >
-              Соусы
-            </Tab>
-          </ul>
-        </nav>
-        <div className={styles.content}>
-          <IngredientsCategory
-            title='Булки'
-            titleRef={titleBunRef}
-            ingredients={buns}
-            ref={bunsRef}
-            onAddIngredient={onAddIngredient}
-          />
-          <IngredientsCategory
-            title='Начинки'
-            titleRef={titleMainRef}
-            ingredients={mains}
-            ref={mainsRef}
-            onAddIngredient={onAddIngredient}
-          />
-          <IngredientsCategory
-            title='Соусы'
-            titleRef={titleSaucesRef}
-            ingredients={sauces}
-            ref={saucesRef}
-            onAddIngredient={onAddIngredient}
-          />
-        </div>
-      </section>
-    </>
+    <section
+      className={styles.burger_ingredients}
+      data-testid='burger-ingredients'
+    >
+      <nav>
+        <ul className={styles.menu}>
+          <Tab value='bun' active={currentTab === 'bun'} onClick={onTabClick}>
+            Булки
+          </Tab>
+          <Tab value='main' active={currentTab === 'main'} onClick={onTabClick}>
+            Начинки
+          </Tab>
+          <Tab
+            value='sauce'
+            active={currentTab === 'sauce'}
+            onClick={onTabClick}
+          >
+            Соусы
+          </Tab>
+        </ul>
+      </nav>
+      <div className={styles.content}>
+        <IngredientsCategory
+          title='Булки'
+          titleRef={titleBunRef}
+          ingredients={buns}
+          ref={bunsRef}
+          onAddIngredient={onAddIngredient}
+        />
+        <IngredientsCategory
+          title='Начинки'
+          titleRef={titleMainRef}
+          ingredients={mains}
+          ref={mainsRef}
+          onAddIngredient={onAddIngredient}
+        />
+        <IngredientsCategory
+          title='Соусы'
+          titleRef={titleSaucesRef}
+          ingredients={sauces}
+          ref={saucesRef}
+          onAddIngredient={onAddIngredient}
+        />
+      </div>
+    </section>
   )
 );

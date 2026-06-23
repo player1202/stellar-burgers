@@ -18,7 +18,6 @@ export const OrderPage: FC = () => {
     }
   }, [dispatch, number]);
 
-  // Подготавливаем данные для OrderInfo
   const orderInfo = useMemo(() => {
     if (!currentOrder) return null;
 

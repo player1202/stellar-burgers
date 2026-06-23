@@ -21,7 +21,7 @@ export const BurgerConstructorUI: FC<BurgerConstructorUIProps> = ({
   <section className={styles.burger_constructor}>
     <div className={styles.burger}>
       {constructorItems.bun ? (
-        <div className={styles.bun_top}>
+        <div className={styles.bun_top} data-testid='constructor-bun-top'>
           <ConstructorElement
             type='top'
             isLocked
@@ -48,11 +48,16 @@ export const BurgerConstructorUI: FC<BurgerConstructorUIProps> = ({
             )
           )
         ) : (
-          <div className={styles.noBuns}>Выберите начинку</div>
+          <div
+            className={styles.noBuns}
+            data-testid='constructor-ingredient-empty'
+          >
+            Выберите начинку
+          </div>
         )}
       </ul>
       {constructorItems.bun ? (
-        <div className={styles.bun_bottom}>
+        <div className={styles.bun_bottom} data-testid='constructor-bun-bottom'>
           <ConstructorElement
             type='bottom'
             isLocked
@@ -69,21 +74,24 @@ export const BurgerConstructorUI: FC<BurgerConstructorUIProps> = ({
     </div>
     <div className={styles.total}>
       <div className={styles.cost}>
-        <p className={`text ${styles.text}`}>{price}</p>
+        <p className={`text ${styles.text}`} data-testid='constructor-price'>
+          {price}
+        </p>
         <CurrencyIcon type='primary' />
       </div>
       <Button
         htmlType='button'
         type='primary'
         size='large'
-        children='Оформить заказ'
         onClick={onOrderClick}
         disabled={!constructorItems.bun || orderRequest}
-      />
+      >
+        Оформить заказ
+      </Button>
     </div>
 
     {orderRequest && (
-      <Modal onClose={closeOrderModal} title={'Оформляем заказ...'}>
+      <Modal onClose={closeOrderModal} title='Оформляем заказ...'>
         <Preloader />
       </Modal>
     )}
