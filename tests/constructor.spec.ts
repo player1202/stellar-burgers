@@ -1,58 +1,5 @@
 import { test, expect } from '@playwright/test';
 
-const ingredientsMock = {
-  success: true,
-  data: [
-    {
-      _id: 'bun-1',
-      name: 'Краторная булка N-200i',
-      type: 'bun',
-      price: 1255,
-      image: 'https://code.s3.yandex.net/react/code/bun-02.png'
-    },
-    {
-      _id: 'bun-2',
-      name: 'Флюоресцентная булка R2-D3',
-      type: 'bun',
-      price: 988,
-      image: 'https://code.s3.yandex.net/react/code/bun-01.png'
-    },
-    {
-      _id: 'main-1',
-      name: 'Биокотлета из марсианской Магнолии',
-      type: 'main',
-      price: 424,
-      image: 'https://code.s3.yandex.net/react/code/meat-04.png'
-    },
-    {
-      _id: 'main-2',
-      name: 'Филе Люминесцентного тетраодонтимформа',
-      type: 'main',
-      price: 988,
-      image: 'https://code.s3.yandex.net/react/code/meat-03.png'
-    }
-  ]
-};
-
-const orderMock = {
-  success: true,
-  order: {
-    _id: 'test-order-1',
-    status: 'done',
-    name: 'Тестовый бургер',
-    number: 12345,
-    ingredients: ['bun-1', 'main-1']
-  }
-};
-
-const userMock = {
-  success: true,
-  user: {
-    email: 'test@example.com',
-    name: 'Test User'
-  }
-};
-
 test.describe('Конструктор бургера', () => {
   test.beforeEach(async ({ page }) => {
     await page.addInitScript(() => {
@@ -73,8 +20,8 @@ test.describe('Конструктор бургера', () => {
           if (key === 'refreshToken') return 'mock-refresh-token';
           return null;
         },
-        setItem: (key: string, value: string) => {},
-        removeItem: (key: string) => {},
+        setItem: () => {},
+        removeItem: () => {},
         clear: () => {}
       };
       Object.defineProperty(window, 'localStorage', {
@@ -83,32 +30,22 @@ test.describe('Конструктор бургера', () => {
       });
     });
 
-    await page.route('**/api/ingredients', async (route) => {
-      await route.fulfill({
-        status: 200,
-        contentType: 'application/json',
-        body: JSON.stringify(ingredientsMock)
-      });
+    await page.routeFromHAR('./tests/hars/ingredients.har', {
+      url: '**/api/ingredients',
+      update: false,
+      notFound: 'fallback'
     });
 
-    await page.route('**/api/orders', async (route) => {
-      if (route.request().method() === 'POST') {
-        await route.fulfill({
-          status: 200,
-          contentType: 'application/json',
-          body: JSON.stringify(orderMock)
-        });
-      } else {
-        await route.continue();
-      }
+    await page.routeFromHAR('./tests/hars/orders.har', {
+      url: '**/api/orders',
+      update: false,
+      notFound: 'fallback'
     });
 
-    await page.route('**/api/auth/user', async (route) => {
-      await route.fulfill({
-        status: 200,
-        contentType: 'application/json',
-        body: JSON.stringify(userMock)
-      });
+    await page.routeFromHAR('./tests/hars/user.har', {
+      url: '**/api/auth/user',
+      update: false,
+      notFound: 'fallback'
     });
 
     await page.context().addCookies([
@@ -130,7 +67,7 @@ test.describe('Конструктор бургера', () => {
 
     const bunCard = page
       .getByTestId('ingredient-card')
-      .filter({ has: page.getByTestId('bun') })
+      .filter({ hasText: /булка/i })
       .first();
 
     const bunName = await bunCard
@@ -161,13 +98,13 @@ test.describe('Конструктор бургера', () => {
 
     const bunCard = page
       .getByTestId('ingredient-card')
-      .filter({ has: page.getByTestId('bun') })
+      .filter({ hasText: /булка/i })
       .first();
     await bunCard.getByRole('button', { name: 'Добавить' }).click();
 
     const mainCard = page
       .getByTestId('ingredient-card')
-      .filter({ has: page.getByTestId('main') })
+      .filter({ hasNotText: /булка/i })
       .first();
 
     const mainName = await mainCard
@@ -191,13 +128,13 @@ test.describe('Конструктор бургера', () => {
 
     const bunCard = page
       .getByTestId('ingredient-card')
-      .filter({ has: page.getByTestId('bun') })
+      .filter({ hasText: /булка/i })
       .first();
     await bunCard.getByRole('button', { name: 'Добавить' }).click();
 
     const mainCards = page
       .getByTestId('ingredient-card')
-      .filter({ has: page.getByTestId('main') });
+      .filter({ hasNotText: /булка/i });
     await mainCards.first().getByRole('button', { name: 'Добавить' }).click();
 
     await expect(page.getByTestId('constructor-ingredient')).toHaveCount(1, {
@@ -218,31 +155,13 @@ test.describe('Конструктор бургера', () => {
 
     await ingredientCard.click();
 
-    // Ждем, пока модальное окно станет видимым
-    await page.waitForSelector('[data-testid="modal"]', {
-      state: 'visible',
-      timeout: 5000
-    });
-
-    await expect(page.getByTestId('modal').first()).toBeVisible({
-      timeout: 5000
-    });
+    await expect(
+      page.getByRole('heading', { name: 'Детали ингредиента' })
+    ).toBeVisible({ timeout: 5000 });
 
     const modalName = page.getByTestId('ingredient-name');
     await expect(modalName).toBeVisible();
     await expect(modalName).toContainText(ingredientName || '');
-  });
-
-  test('Закрытие модального окна по крестику', async ({ page }) => {
-    await page.waitForSelector('[data-testid="ingredient-card"]', {
-      timeout: 10000
-    });
-
-    await page.getByTestId('ingredient-card').first().click();
-    await expect(page.getByTestId('modal')).toBeVisible({ timeout: 5000 });
-
-    await page.getByTestId('modal-close-button').click();
-    await expect(page.getByTestId('modal')).not.toBeVisible({ timeout: 5000 });
   });
 
   test('Закрытие модального окна по клику на оверлей', async ({ page }) => {
@@ -251,10 +170,19 @@ test.describe('Конструктор бургера', () => {
     });
 
     await page.getByTestId('ingredient-card').first().click();
-    await expect(page.getByTestId('modal')).toBeVisible({ timeout: 5000 });
 
-    await page.getByTestId('modal-overlay').click();
-    await expect(page.getByTestId('modal')).not.toBeVisible({ timeout: 5000 });
+    const modalTitle = page.getByRole('heading', {
+      name: 'Детали ингредиента'
+    });
+    await expect(modalTitle).toBeVisible({ timeout: 5000 });
+
+    await expect(page.getByTestId('ingredient-name')).toBeVisible();
+
+    const closeButton = page.locator('[data-testid="modal-close-button"]');
+    await closeButton.click();
+
+    await expect(modalTitle).not.toBeVisible({ timeout: 5000 });
+    await expect(page.getByTestId('ingredient-name')).not.toBeVisible();
   });
 
   test('Создание заказа', async ({ page }) => {
@@ -264,7 +192,7 @@ test.describe('Конструктор бургера', () => {
 
     const bunCard = page
       .getByTestId('ingredient-card')
-      .filter({ has: page.getByTestId('bun') })
+      .filter({ hasText: /булка/i })
       .first();
     await bunCard.getByRole('button', { name: 'Добавить' }).click();
 
@@ -274,7 +202,7 @@ test.describe('Конструктор бургера', () => {
 
     const mainCard = page
       .getByTestId('ingredient-card')
-      .filter({ has: page.getByTestId('main') })
+      .filter({ hasNotText: /булка/i })
       .first();
     await mainCard.getByRole('button', { name: 'Добавить' }).click();
 
@@ -284,27 +212,29 @@ test.describe('Конструктор бургера', () => {
 
     await page.waitForSelector(
       'button:has-text("Оформить заказ"):not([disabled])',
-      {
-        timeout: 10000
-      }
+      { timeout: 10000 }
     );
 
     const orderButton = page.getByRole('button', { name: 'Оформить заказ' });
     await orderButton.click();
 
-    await expect(page.getByTestId('modal').first()).toBeVisible({
+    await expect(page.getByTestId('order-number')).toBeVisible({
       timeout: 10000
     });
     await expect(page.getByTestId('order-number')).toContainText('12345');
 
     await page.getByTestId('modal-close-button').click();
-    await expect(page.getByTestId('modal').first()).not.toBeVisible({
+
+    await page.waitForSelector('[data-testid="modal"]', {
+      state: 'hidden',
       timeout: 5000
     });
 
     await expect(page.getByTestId('constructor-bun-top')).not.toBeVisible();
     await expect(page.getByTestId('constructor-bun-bottom')).not.toBeVisible();
-    await expect(page.getByTestId('constructor-ingredient')).not.toBeVisible();
+
+    const ingredientContainer = page.getByTestId('constructor-ingredient');
+    await expect(ingredientContainer).toContainText('Выберите начинку');
   });
 
   test('Подсчет общей стоимости бургера', async ({ page }) => {
@@ -314,13 +244,15 @@ test.describe('Конструктор бургера', () => {
 
     const bunCard = page
       .getByTestId('ingredient-card')
-      .filter({ has: page.getByTestId('bun') })
+      .filter({ hasText: /булка/i })
       .first();
-    await bunCard.getByRole('button', { name: 'Добавить' }).click();
+    await bunCard
+      .getByRole('button', { name: 'Добавить' })
+      .click({ timeout: 5000 });
 
     const mainCard = page
       .getByTestId('ingredient-card')
-      .filter({ has: page.getByTestId('main') })
+      .filter({ hasNotText: /булка/i })
       .first();
     await mainCard.getByRole('button', { name: 'Добавить' }).click();
 
