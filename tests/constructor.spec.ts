@@ -30,7 +30,6 @@ test.describe('Конструктор бургера', () => {
       });
     });
 
-    // ✅ Используем HAR-файлы
     await page.routeFromHAR('./tests/hars/ingredients.har', {
       url: '**/api/ingredients',
       update: false
