@@ -5,12 +5,12 @@ test.describe('Конструктор бургера', () => {
     await page.addInitScript(() => {
       const style = document.createElement('style');
       style.innerHTML = `
-        #webpack-dev-server-client-overlay {
-          display: none !important;
-          pointer-events: none !important;
-          opacity: 0 !important;
-        }
-      `;
+      #webpack-dev-server-client-overlay {
+        display: none !important;
+        pointer-events: none !important;
+        opacity: 0 !important;
+      }
+    `;
       document.head.appendChild(style);
     });
 
@@ -30,22 +30,20 @@ test.describe('Конструктор бургера', () => {
       });
     });
 
+    // ✅ Используем HAR-файлы
     await page.routeFromHAR('./tests/hars/ingredients.har', {
       url: '**/api/ingredients',
-      update: false,
-      notFound: 'fallback'
+      update: false
     });
 
     await page.routeFromHAR('./tests/hars/orders.har', {
       url: '**/api/orders',
-      update: false,
-      notFound: 'fallback'
+      update: false
     });
 
     await page.routeFromHAR('./tests/hars/user.har', {
       url: '**/api/auth/user',
-      update: false,
-      notFound: 'fallback'
+      update: false
     });
 
     await page.context().addCookies([
