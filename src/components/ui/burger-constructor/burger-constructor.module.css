@@ -1,53 +1,68 @@
 .burger_constructor {
   width: 600px;
-  color: #f2f2f3;
   display: flex;
   flex-direction: column;
+  gap: 16px;
   padding-bottom: 20px;
 }
 
-.elements {
-  min-height: 100px;
+.burger {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  padding: 0 16px 0 32px; /* Добавьте левый отступ здесь */
+}
 
-  overflow-y: scroll;
-  list-style-type: none;
-  margin: 0;
+.bun_top,
+.bun_bottom {
+  width: 100%;
   padding: 0;
 }
 
-.total {
+.elements {
   display: flex;
-  align-items: center;
-  justify-content: flex-end;
+  flex-direction: column;
+  gap: 16px;
+  min-height: 80px;
+  max-height: 400px;
+  overflow-y: auto;
+  list-style-type: none;
+  margin: 0;
+  padding: 0;
+  scrollbar-width: none;
+  -ms-overflow-style: none;
 }
 
-.cost {
-  display: flex;
-  align-items: center;
+.elements::-webkit-scrollbar {
+  display: none;
 }
 
-.text {
-  font-family: Iceland;
-  font-style: normal;
-  font-weight: normal;
-  font-size: 48px;
-  line-height: 36px;
+.elements li {
+  width: 100%;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  min-height: 80px;
+  padding: 0;
+  margin: 0;
 }
 
 .noBuns {
   box-sizing: border-box;
   padding: 16px 24px;
   display: flex;
-  justify-content: center;
+  justify-content: flex-start;
   align-items: center;
   border-radius: var(--common-border-radius-s);
   background: var(--background-element);
   min-height: 80px;
+  height: 80px;
   font-family: 'Jet Brains Mono';
   font-size: 16px;
   line-height: 24px;
-  color: #f2f2f3;
-  margin-left: 44px;
+  color: #8585ad;
+  width: 100%;
+  margin-left: 0;
 }
 
 .noBunsTop {
@@ -58,19 +73,27 @@
   border-radius: var(--bottom-constructor-item-border-radius);
 }
 
-.element {
+.total {
   display: flex;
   align-items: center;
   justify-content: flex-end;
+  gap: 40px;
+  padding: 16px 16px 0;
+  border-top: 1px solid #2f2f37;
+  margin-top: 40px;
 }
 
-.element:last-child {
-  margin-bottom: 0;
-}
-
-.element_fullwidth {
+.cost {
   display: flex;
-  flex-direction: column;
-  width: 100%;
-  max-width: 536px;
+  align-items: center;
+  gap: 8px;
+}
+
+.text {
+  font-family: Iceland;
+  font-style: normal;
+  font-weight: normal;
+  font-size: 48px;
+  line-height: 36px;
+  margin: 0;
 }

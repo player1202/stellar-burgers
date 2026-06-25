@@ -6,9 +6,9 @@ import { OrderDetailsUIProps } from './type';
 export const OrderDetailsUI: React.FC<OrderDetailsUIProps> = ({
   orderNumber
 }) => (
-  <>
+  <div className={styles.container}>
     <h2 className={`${styles.title} text text_type_digits-large mt-2 mb-4`}>
-      {orderNumber}
+      <span data-testid='order-number'>{orderNumber}</span>
     </h2>
     <p className='text text_type_main-medium'>идентификатор заказа</p>
     <img
@@ -22,5 +22,5 @@ export const OrderDetailsUI: React.FC<OrderDetailsUIProps> = ({
     <p className={`${styles.text} text text_type_main-default`}>
       Дождитесь готовности на орбитальной станции
     </p>
-  </>
+  </div>
 );
